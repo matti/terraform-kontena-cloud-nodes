@@ -17,7 +17,7 @@ resource "null_resource" "cloud_nodes" {
 
 module "until_not_created" {
   source  = "matti/until/shell"
-  version = "0.0.1"
+  version = "0.0.2"
 
   depends_id = "${null_resource.cloud_nodes.id}"
 
