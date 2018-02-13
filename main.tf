@@ -5,7 +5,7 @@ resource "null_resource" "start" {
 }
 
 resource "null_resource" "cloud_nodes" {
-  depends_on = "null_resource.start"
+  depends_on = ["null_resource.start"]
 
   triggers {
     type  = "${var.type}"
