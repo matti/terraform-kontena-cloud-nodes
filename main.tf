@@ -13,7 +13,22 @@ resource "null_resource" "cloud_nodes" {
   }
 
   provisioner "local-exec" {
-    command = "kontena cloud node create --count ${var.count} --type ${var.type}"
+    command = <<EOF
+kontena cloud node create \
+--count ${var.count} \
+--type ${var.type} \
+| grep done | cut -d' ' -f5 > ${path.module}/nodes.${self.id}
+EOF
+  }
+
+  provisioner "local-exec" {
+    when = "destroy"
+
+    command = <<EOF
+cat ${path.module}/nodes.${self.id} \
+| xargs -L1 kontena cloud node rm --force \
+&& rm ${path.module}/nodes.${self.id}
+EOF
   }
 }
 
